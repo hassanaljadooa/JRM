@@ -4,6 +4,7 @@ import {CreateReminderButton} from "./Components/CreateReminderButton.jsx";
 import {Badge} from "./Components/Elements/Badge.jsx";
 import {ReminderViewer} from "./Components/ReminderViewer.jsx";
 import {VerticalDivider} from "./Components/Elements/VerticalDivider.jsx";
+import {NavBar} from "./Components/NavBar.jsx";
 
 export default function App() {
     const [todos, setTodos] = useState(() => {
@@ -74,8 +75,9 @@ export default function App() {
     //console.log(todos)
     return (
         <div>
-            <div className="bg-black px-2 py-1.5 flex border-b border-b-slate-500 gap-1">
-                <Badge type="info" content={"July 1, 2023"} />
+            <NavBar />
+            <div className="custom-scrollbar bg-black px-2 py-1.5 flex border-b border-b-slate-500 gap-1 overflow-x-auto">
+                <Badge type="info" content={currentDate.toDateString()} />
                 <Badge type={todos.length === 0 ? "success" : "info"} content={todos.length === 0 ? "You're all set!" : `${todos.length} Incomplete`} />
                 <VerticalDivider />
                 <button onClick={() => {setTodos([])}}>
