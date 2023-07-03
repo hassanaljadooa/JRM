@@ -22,9 +22,11 @@ export function ReminderViewer({id, title, completed, color, datetime, toggleRem
 
 	return (
 		<>
-			<div className="bg-slate-100 w-full h-auto rounded-t-lg p-2">
-				<p className="font-medium text-xl">{title}</p>
-				<Badge type="warning" content={"Due: " + datetime} />
+			<div className="bg-slate-100 w-full h-auto rounded-t-lg">
+				<p className="font-medium text-xl p-2">{title}</p>
+				<div className="p-1">
+					<Badge type="info" content={"Due: " + datetime} />
+				</div>
 			</div>
 			<div className="h-auto w-full">
 				<span className="flex justify-between -space-x-px overflow-hidden rounded-b-lg border-t-2 border-t-indigo-300 bg-white">

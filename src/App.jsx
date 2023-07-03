@@ -1,21 +1,24 @@
 import './index.css'
 import {useEffect, useState} from "react";
-import {CreateReminderButton} from "./Components/CreateReminderButton.jsx";
-import {Badge} from "./Components/Elements/Badge.jsx";
-import {ReminderViewer} from "./Components/ReminderViewer.jsx";
-import {VerticalDivider} from "./Components/Elements/VerticalDivider.jsx";
 import {NavBar} from "./Components/NavBar.jsx";
+import {ReminderList} from "./Components/ReminderList.jsx";
 
 export default function App() {
+    const currentDate = new Date()
+
     const [todos, setTodos] = useState(() => {
-        return localStorage.getItem('ITEMS') !== null ? JSON.parse(localStorage.getItem('ITEMS')) : []
+        return localStorage.getItem('incompleteReminder') !== null ? JSON.parse(localStorage.getItem('incompleteReminder')) : []
+    })
+
+    // TODOS marked as completed
+    const [completeTodos, setCompleteTodos] = useState(() => {
+        return localStorage.getItem('completeReminder') !== null ? JSON.parse(localStorage.getItem('completeReminder')) : []
     })
 
     useEffect(() => {
-        localStorage.setItem("ITEMS", JSON.stringify(todos))
-    }, [todos])
-
-    const currentDate = new Date()
+        localStorage.setItem("incompleteReminder", JSON.stringify(todos))
+        localStorage.setItem("completeReminder", JSON.stringify(completeTodos))
+    }, [todos, completeTodos])
 
     function generateBrightHexColor() {
         var hex = '0123456789ABCDEF';
@@ -76,36 +79,7 @@ export default function App() {
     return (
         <div>
             <NavBar />
-            <div className="custom-scrollbar bg-black px-2 py-1.5 flex border-b border-b-slate-500 gap-1 overflow-x-auto">
-                <Badge type="info" content={currentDate.toDateString()} />
-                <Badge type={todos.length === 0 ? "success" : "info"} content={todos.length === 0 ? "You're all set!" : `${todos.length} Incomplete`} />
-                <VerticalDivider />
-                <button onClick={() => {setTodos([])}}>
-                    <Badge content="Delete All Reminders" />
-                </button>
-                <button onClick={() => {
-                    console.log(todos)}}>
-                    <Badge content="Log Reminders" />
-                </button>
-            </div>
-            <div className="w-full h-auto custom-scrollbar bg-black overflow-x-auto p-2 border-b-4 border-b-indigo-500">
-                <div className="flex gap-2">
-                    <div className="flex-shrink-0 sticky">
-                        <CreateReminderButton createReminder={createReminder} />
-                    </div>
-                    {
-                        todos.map(todo => {
-                            if (todo.completed !== true) {
-                                return (
-                                    <div className="flex-shrink-0 sticky">
-                                        <ReminderViewer {...todo} deleteReminder={deleteReminder} editReminder={editReminder} toggleReminder={toggleReminder} key={todo.id} />
-                                    </div>
-                                )
-                            }
-                        })
-                    }
-                </div>
-            </div>
+            <ReminderList setTodos={setTodos} todos={todos} editReminder={editReminder} toggleReminder={toggleReminder} createReminder={createReminder} deleteReminder={deleteReminder} />
         </div>
     )
 }
