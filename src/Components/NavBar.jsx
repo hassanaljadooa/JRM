@@ -12,7 +12,7 @@ export const NavBar = () => {
 
 	return (
 		<>
-			<div className="w-full bg-slate-100 p-2 flex justify-between">
+			<div className="w-full bg-slate-100 p-2 flex justify-between border-b-4 border-b-indigo-500">
 				<div className="py-2 font-semibold text-xl tracking-wide">
 					JRM
 				</div>

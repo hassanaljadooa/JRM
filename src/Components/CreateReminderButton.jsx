@@ -18,7 +18,7 @@ export function CreateReminderButton({createReminder}) {
 	}
 	return (
 		<>
-			<button onClick={createReminderModal} className="bg-slate-100 font-semibold w-full h-full p-6 rounded-lg shadow text-3xl hover:bg-slate-200 active:bg-slate-300">
+			<button onClick={createReminderModal} className="bg-slate-100 font-semibold w-full h-full p-6 rounded-md shadow text-4xl hover:bg-slate-200 active:bg-slate-300">
 				<i className="fa-solid fa-plus"></i>
 			</button>
 		</>
