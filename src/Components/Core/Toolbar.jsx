@@ -1,5 +1,5 @@
-import {Badge} from "./Elements/Badge.jsx";
-import {VerticalDivider} from "./Elements/VerticalDivider.jsx";
+import {Badge} from "../Elements/Badge.jsx";
+import {VerticalDivider} from "../Elements/VerticalDivider.jsx";
 
 export const Toolbar = ({todos, setTodos, setCompleteTodos, toggleDisplay, displayMode}) => {
 	const currentDate = new Date()

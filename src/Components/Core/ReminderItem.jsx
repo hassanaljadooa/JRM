@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import {Badge} from "./Elements/Badge.jsx";
+import {Badge} from "../Elements/Badge.jsx";
 
 export function ReminderItem({id, title, completed, datetime, toggleReminder, deleteReminder, editReminder}) {
 	async function reminderEditor () {
@@ -22,15 +22,18 @@ export function ReminderItem({id, title, completed, datetime, toggleReminder, de
 	}
 
 	return (
-		<>
-			<div className="bg-slate-100 w-full h-auto rounded-t-lg">
-				<p className="font-medium text-xl p-2">{title}</p>
+		<div>
+			<div className="bg-white w-full h-auto rounded-t-lg">
+				<p className="font-medium text-xl p-2 ">{title}</p>
 				<div className="p-1">
-						<Badge type="info" content={[<i className="fa-solid fa-bell"></i>," ", datetime]} />
+						<Badge type="info" pill={true} content={[<i className="fa-solid fa-bell"></i>," ", datetime]} />
 				</div>
 			</div>
 			<div className="h-auto w-full">
-				<span className="flex justify-between -space-x-px overflow-hidden rounded-b-lg border-t-2 border-t-indigo-300 bg-white">
+				<button className="w-full inline-block px-4 py-2 text-sm font-medium bg-white hover:bg-gray-50 focus:relative border-t border-t-gray-400">
+					<i className="fa-solid fa-eye"></i> View Reminder
+				</button>
+				<span className="flex justify-between -space-x-px overflow-hidden rounded-b-lg border-t border-t-gray-400 bg-white">
 					<button onClick={() => {
 						const status = completed === true ? false : true
 						toggleReminder(id, status)
@@ -45,6 +48,6 @@ export function ReminderItem({id, title, completed, datetime, toggleReminder, de
 					</button>
 				</span>
 			</div>
-		</>
+		</div>
 	)
 }

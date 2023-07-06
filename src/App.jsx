@@ -1,8 +1,8 @@
 import './index.css'
 import {useEffect, useState} from "react";
 import {NavBar} from "./Components/NavBar.jsx";
-import {ReminderList} from "./Components/ReminderList.jsx";
-import {Toolbar} from "./Components/Toolbar.jsx";
+import {ReminderList} from "./Components/Core/ReminderList.jsx";
+import {Toolbar} from "./Components/Core/Toolbar.jsx";
 
 export default function App() {
     const currentDate = new Date()
@@ -32,21 +32,6 @@ export default function App() {
             return displayMode === "incomplete" ? "completed" : "incomplete"
         })
     }
-    
-    function generateBrightHexColor() {
-        var hex = '0123456789ABCDEF';
-        var color = '#';
-
-        // Generate a random bright color excluding green
-        do {
-            color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += hex[Math.floor(Math.random() * 10) + 6];
-            }
-        } while (color.includes('8') || color.includes('9') || color.includes('A') || color.includes('B') || color.includes('C') || color.includes('D') || color.includes('E') || color.includes('F'));
-
-        return color;
-    }
 
     /**
      * TODO: This should refactored into class based data model
@@ -59,7 +44,6 @@ export default function App() {
                     id:crypto.randomUUID(),
                     title: title,
                     completed: false,
-                    color: generateBrightHexColor(),
                     datetime: currentDate.toDateString(),
                 }
             ]
@@ -110,7 +94,7 @@ export default function App() {
 
     //console.log(todos)
     return (
-        <div>
+        <div className="bg-black">
             <NavBar />
             <div>
                 <div className="sticky top-0 z-10">
@@ -122,7 +106,7 @@ export default function App() {
                         todos={displayMode === 'incomplete' ? todos : completeTodos}
                     />
                 </div>
-                <div className="">
+                <div className="bg-white grid grid-rows-1 gap-2 p-1">
                     <ReminderList
                         todos={displayMode === 'incomplete' ? todos : completeTodos}
                         editReminder={editReminder}
