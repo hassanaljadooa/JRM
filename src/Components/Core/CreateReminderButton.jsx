@@ -1,20 +1,34 @@
 import * as Swal from "sweetalert2";
 export function CreateReminderButton({createReminder}) {
 	async function createReminderModal () {
-		const reminder = await Swal.fire({
-			title: "Create a Reminder",
-			input: "text",
-			inputLabel: "What would you like your reminder to say?",
+		Swal.fire({
+			title: 'Enter Details',
+			html:
+				'<div>' +
+				'	<input id="text-input" class="swal2-input w-80" placeholder="Reminder Title">' +
+				'	<input id="date-input" class="swal2-input w-80" type="date"> ' +
+				'</div>',
 			showCancelButton: true,
-			inputValidator: (value) => {
-				if (!value) {
-					return "Please write something"
+			confirmButtonText: 'Submit',
+			preConfirm: () => {
+				const textValue = document.getElementById('text-input').value;
+				const dateValue = document.getElementById('date-input').value;
+
+				if (!textValue || !dateValue) {
+					Swal.showValidationMessage('Please enter both text and date');
 				}
+
+				return { text: textValue, date: dateValue };
 			}
-		})
-		if (reminder.value) {
-			createReminder(reminder.value)
-		}
+		}).then((result) => {
+			if (result.isConfirmed) {
+				const title = result.value.text;
+				const dueDate = result.value.date;
+
+				createReminder(title, dueDate)
+			}
+		});
+
 	}
 
 

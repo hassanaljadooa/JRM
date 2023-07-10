@@ -36,7 +36,7 @@ export default function App() {
     /**
      * TODO: This should refactored into class based data model
      * */
-    function createReminder(title) {
+    function createReminder(title, dueDate) {
         setTodos(currentTodos => {
             // creates a new copy of the current todo state, then adds a new todo object which is then repopulated into the state.
             return [...currentTodos,
@@ -44,7 +44,7 @@ export default function App() {
                     id:crypto.randomUUID(),
                     title: title,
                     completed: false,
-                    datetime: currentDate.toDateString(),
+                    dueDate: dueDate,
                 }
             ]
         })
@@ -84,10 +84,10 @@ export default function App() {
     }
 
     // edits the title of the todo object
-    function editReminder (title, todoID) {
+    function editReminder (todoID, title, dueDate) {
         setTodos(currentTodos => {
             return currentTodos.map(todo => {
-                return todo.id === todoID ? {...todo, title} : todo
+                return todo.id === todoID ? {...todo, title, dueDate} : todo
             })
         })
     }

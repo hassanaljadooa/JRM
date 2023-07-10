@@ -7,13 +7,13 @@ export const ReminderList = ({todos, toggleReminder, deleteReminder, editReminde
 	return (
 		<div className="bg-gray-100 rounded-lg p-1 grid grid-rows-1 gap-1 border-b-2">
 			{true === true && (
-				<div className="w-full p-1 rounded-lg bg-gray-300">
+				<div className="w-full p-1 rounded-full bg-gray-300">
 					<div className="flex gap-1">
 						<div>
-							<Badge content="Today" type="info" />
+							<Badge content="Today" pill={true} type="info" />
 						</div>
 						<div>
-							<Badge content="5 Incomplete" type="error" />
+							<Badge content="5 Incomplete" pill={true} type="error" />
 						</div>
 					</div>
 				</div>
