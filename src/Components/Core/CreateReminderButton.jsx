@@ -1,44 +1,48 @@
-import * as Swal from "sweetalert2";
-export function CreateReminderButton({createReminder}) {
-	async function createReminderModal () {
-		Swal.fire({
-			title: 'Enter Details',
-			html:
-				'<div>' +
-				'	<input id="text-input" class="swal2-input w-80" placeholder="Reminder Title">' +
-				'	<input id="date-input" class="swal2-input w-80" type="date"> ' +
-				'</div>',
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { CreateReminderModalBody } from "./CreateReminderModalBody";
+import { useRef, useEffect } from "react";
+
+/* 
+* This component is responsible for both the UI aspect of creating a reminder 
+* as well as handling the user input
+*/
+
+export function CreateReminderButton({ reminderInfo, setReminderInfo, createReminder }) {
+	const MySwal = withReactContent(Swal)
+
+	let reminderInfoRef = useRef(reminderInfo)
+
+	useEffect(() => {
+		reminderInfoRef.current = reminderInfo
+	}, [reminderInfo])
+
+	async function createReminderModal() {
+		MySwal.fire({
+			title: 'New Reminder',
+			html: <CreateReminderModalBody reminderInfo={reminderInfo} setReminderInfo={setReminderInfo} />,
 			showCancelButton: true,
-			confirmButtonText: 'Submit',
+			cancelButtonText: "Cancel",
+			confirmButtonText: "Create Reminder",
+			allowEscapeKey: true,
+			allowEnterKey: true,
 			preConfirm: () => {
-				const textValue = document.getElementById('text-input').value;
-				const dateValue = document.getElementById('date-input').value;
-
-				if (!textValue || !dateValue) {
-					Swal.showValidationMessage('Please enter both text and date');
+				if (!reminderInfoRef.current.title || !reminderInfoRef.current.dueDate) {
+					MySwal.showValidationMessage('Please enter both text and date');
 				}
-
-				return { text: textValue, date: dateValue };
 			}
-		}).then((result) => {
+		}).then(result => {
 			if (result.isConfirmed) {
-				const title = result.value.text;
-				const dueDate = result.value.date;
-
-				createReminder(title, dueDate)
+				createReminder(reminderInfoRef.current)
 			}
-		});
-
+		})
 	}
-
 
 	return (
 		<>
 			<button onClick={createReminderModal} className="bg-white font-semibold w-full h-full p-6 rounded-md text-4xl hover:bg-slate-200 active:bg-slate-300">
 				<i className="fa-solid fa-plus"></i>
 			</button>
-
-			{/*{isModalRendered === true && (<CreateReminderModal />)}*/}
 		</>
 	)
 }

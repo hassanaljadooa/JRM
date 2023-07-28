@@ -1,32 +1,33 @@
 import './index.css'
-import {useEffect, useState} from "react";
-import {NavBar} from "./Components/NavBar.jsx";
-import {ReminderList} from "./Components/Core/ReminderList.jsx";
-import {Toolbar} from "./Components/Core/Toolbar.jsx";
+import { useEffect, useState } from "react";
+import { NavBar } from "./Components/NavBar.jsx";
+import { ReminderList } from "./Components/Core/ReminderList.jsx";
+import { Toolbar } from "./Components/Core/Toolbar.jsx";
 
 export default function App() {
     const currentDate = new Date()
-
     // display mode to show completed or/ incomplete reminders based on the value in the state
     let [displayMode, setDisplayMode] = useState('incomplete')
 
     const [todos, setTodos] = useState(() => {
-        return localStorage.getItem('incompleteReminder') !== null ? JSON.parse(localStorage.getItem('incompleteReminder')) : []
+        return localStorage.getItem('reminders') !== null ? JSON.parse(localStorage.getItem('reminders')) : []
     })
 
-    // TODOS marked as completed
-    const [completeTodos, setCompleteTodos] = useState(() => {
-        return localStorage.getItem('completeReminder') !== null ? JSON.parse(localStorage.getItem('completeReminder')) : []
-    })
+    const [currentData, setCurrentData] = useState([])
+
+    // moniters changes to the todos data and display mode and reacts accordingly
+    useEffect(() => {
+        // filters todos data based on completed/incomplete reminders
+        displayMode === 'incomplete' ? setCurrentData(todos.filter(todo => todo.completed === false)) : setCurrentData(todos.filter(todo => todo.completed === true))
+    }, [todos, displayMode])
 
     useEffect(() => {
-        localStorage.setItem("incompleteReminder", JSON.stringify(todos))
-        localStorage.setItem("completeReminder", JSON.stringify(completeTodos))
+        localStorage.setItem("reminders", JSON.stringify(todos))
 
-        console.log("Incomplete", todos)
-        console.log("Complete", completeTodos)
-    }, [todos, completeTodos])
+        console.log("Current Reminders", todos)
+    }, [todos])
 
+    // toggles display mode to show completed and incomplete reminders
     function toggleDisplay() {
         setDisplayMode(() => {
             return displayMode === "incomplete" ? "completed" : "incomplete"
@@ -36,58 +37,39 @@ export default function App() {
     /**
      * TODO: This should refactored into class based data model
      * */
-    function createReminder(title, dueDate) {
+    function createReminder(reminderInfo) {
         setTodos(currentTodos => {
             // creates a new copy of the current todo state, then adds a new todo object which is then repopulated into the state.
-            return [...currentTodos,
-                {
-                    id:crypto.randomUUID(),
-                    title: title,
-                    completed: false,
-                    dueDate: dueDate,
-                }
-            ]
+            return [...currentTodos, reminderInfo]
         })
     }
 
     // toggles completion state
     function toggleReminder(id, completed) {
-        if (completed) {
-            todos.map(todo => {
-                if (todo.id === id) {
-                    setCompleteTodos(currentCompletedReminders => {
-                        return [...currentCompletedReminders, {...todo, completed}]
-                    })
-                    setTodos(() => {
-                        return todos.filter(todo => todo.id !== id)
-                    })
-                }
-            })
-        } else {
-            todos.map(todo => {
-                if (todo.id === id) {
-                    setTodos(currentReminders => {
-                        return [...currentReminders, {...todo, completed}]
-                    })
-                    setCompleteTodos(() => {
-                        return completeTodos.filter(todo => todo.id !== id)
-                    })
-                }
-            })
+        const foundTodo = todos.find(todo => todo.id === id);
+        if (foundTodo) {
+            setTodos(currentTodos => {
+                return currentTodos.map(todo => {
+                    if (todo.id === id) {
+                        return { ...todo, completed };
+                    }
+                    return todo;
+                });
+            });
         }
     }
 
-    function deleteReminder (todoID) {
+    function deleteReminder(todoID) {
         setTodos(currentTodos => {
             return currentTodos.filter(todo => todo.id !== todoID)
         })
     }
 
     // edits the title of the todo object
-    function editReminder (todoID, title, dueDate) {
+    function editReminder(todoID, title, dueDate) {
         setTodos(currentTodos => {
             return currentTodos.map(todo => {
-                return todo.id === todoID ? {...todo, title, dueDate} : todo
+                return todo.id === todoID ? { ...todo, title, dueDate } : todo
             })
         })
     }
@@ -100,15 +82,15 @@ export default function App() {
                 <div className="sticky top-0 z-10">
                     <Toolbar
                         setTodos={setTodos}
-                        setCompleteTodos={setCompleteTodos}
                         toggleDisplay={toggleDisplay}
                         displayMode={displayMode}
-                        todos={displayMode === 'incomplete' ? todos : completeTodos}
+                        todos={currentData}
                     />
                 </div>
                 <div className="bg-white grid grid-rows-1 gap-2 p-1">
                     <ReminderList
-                        todos={displayMode === 'incomplete' ? todos : completeTodos}
+                        todos={currentData}
+                        displayMode={displayMode}
                         editReminder={editReminder}
                         toggleReminder={toggleReminder}
                         createReminder={createReminder}
@@ -117,6 +99,5 @@ export default function App() {
                 </div>
             </div>
         </div>
-
     )
 }

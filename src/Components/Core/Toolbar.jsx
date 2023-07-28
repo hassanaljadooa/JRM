@@ -1,14 +1,14 @@
-import {Badge} from "../Elements/Badge.jsx";
-import {VerticalDivider} from "../Elements/VerticalDivider.jsx";
+import { Badge } from "../Elements/Badge.jsx";
+import { VerticalDivider } from "../Elements/VerticalDivider.jsx";
 
-export const Toolbar = ({todos, setTodos, setCompleteTodos, toggleDisplay, displayMode}) => {
+export const Toolbar = ({ todos, setTodos, toggleDisplay, displayMode }) => {
 	const currentDate = new Date()
 
 	return (
 		<>
 			<div className="custom-scrollbar bg-black flex border-b border-b-slate-500 overflow-x-auto">
 				<div className="p-1.5 flex gap-1">
-					<Badge type="info" pill={true} content={[<i className="fa-solid fa-calendar-days"></i> ," ",currentDate.toDateString()]} />
+					<Badge type="info" pill={true} content={[<i className="fa-solid fa-calendar-days"></i>, " ", currentDate.toDateString()]} />
 					{displayMode === 'incomplete' && (
 						<Badge type={todos.length === 0 ? "success" : "error"} pill={true} content={todos.length === 0 ? "You're all set!" : `${todos.length} Incomplete`} />
 					)}
@@ -20,7 +20,6 @@ export const Toolbar = ({todos, setTodos, setCompleteTodos, toggleDisplay, displ
 				<div className="p-1.5 flex gap-1">
 					<button onClick={() => {
 						setTodos([])
-						setCompleteTodos([])
 					}}>
 						<Badge content="Delete All Reminders" />
 					</button>
