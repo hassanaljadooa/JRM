@@ -4,31 +4,23 @@ import { CreateReminderButton } from "./CreateReminderButton.jsx";
 import { ReminderItem } from "./ReminderItem.jsx";
 
 export const ReminderList = ({ todos, toggleReminder, deleteReminder, editReminder, createReminder, displayMode }) => {
-	let reminderInfoScaffold = {
-		id: 0,
-		title: '',
-		completed: false,
-		dueDate: '',
-	}
-
-	// parent reminder state shared between CreateReminderButton.jsx & CreateReminderModalBody.jsx
-	// this is only for creating a reminder
-	let [reminderInfo, setReminderInfo] = useState(reminderInfoScaffold)
-
-	// shared state for modifying existing reminders
-	// its necessary to do it this way because the editor modal is made of 
-	// two seperate components and they both need access to a shared state to track data changes.
-	let [editReminderInfo, setEditReminderInfo] = useState({ title: '', dueDate: '' })
-
 	// counts the reminders that are marked as "incomplete"
 	const incompleteCount = todos.reduce((count, item) => count + (item.completed === false ? 1 : 0), 0),
 		completedCount = todos.reduce((count, item) => count + (item.completed === true ? 1 : 0), 0);
 
+	// parent reminder state shared between CreateReminderButton.jsx & CreateReminderModalBody.jsx
+	// this is only for creating a reminder
+	let [reminderInfo, setReminderInfo] = useState({})
+
+	// shared state for modifying existing reminders
+	// its necessary to do it this way because the editor modal is made of 
+	// two seperate components and they both need access to a shared state to track data changes.
+	let [editReminderInfo, setEditReminderInfo] = useState({})
 
 	return (
-		<div className="bg-gray-100 rounded-lg p-1 grid grid-rows-1 gap-1 border-b-2">
+		<div className="bg-slate-100 rounded-lg p-1 grid grid-rows-1 gap-1 shadow-sm shadow-slate-700">
 			{true === true && (
-				<div className="w-full p-1 rounded-full bg-gray-300">
+				<div className="w-full p-1 rounded-full bg-slate-300">
 					<div className="flex gap-1">
 						<div>
 							<Badge content="Today"
@@ -36,9 +28,12 @@ export const ReminderList = ({ todos, toggleReminder, deleteReminder, editRemind
 								type="info" />
 						</div>
 						<div>
-							<Badge content={displayMode === 'incomplete' ? incompleteCount + ' Incomplete' : completedCount + ' Completed'}
-								pill={true}
-								type="info" />
+							{/* Checks whether there are any reminders to complete */}
+							{todos.length === 0 ? <Badge pill={true} type='success' content='All Done' /> :
+
+								<Badge content={displayMode === 'incomplete' ? incompleteCount + ' Incomplete' : completedCount + ' Completed'}
+									pill={true}
+									type={displayMode === 'incomplete' ? 'error' : 'success'} />}
 						</div>
 					</div>
 				</div>

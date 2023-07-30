@@ -13,7 +13,7 @@ export const Toolbar = ({ todos, setTodos, toggleDisplay, displayMode }) => {
 						<Badge type={todos.length === 0 ? "success" : "error"} pill={true} content={todos.length === 0 ? "You're all set!" : `${todos.length} Incomplete`} />
 					)}
 					{displayMode === 'completed' && (
-						<Badge type="success" pill={true} content={`${todos.length} Completed`} />
+						<Badge type="success" pill={true} content={`${todos.length} Completed Reminders`} />
 					)}
 				</div>
 				<VerticalDivider />

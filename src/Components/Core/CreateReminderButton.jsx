@@ -21,19 +21,22 @@ export function CreateReminderButton({ reminderInfo, setReminderInfo, createRemi
 		MySwal.fire({
 			title: 'New Reminder',
 			html: <CreateReminderModalBody reminderInfo={reminderInfo} setReminderInfo={setReminderInfo} />,
-			showCancelButton: true,
 			cancelButtonText: "Cancel",
 			confirmButtonText: "Create Reminder",
+			confirmButtonColor: '#6366f1',
+			showCancelButton: true,
 			allowEscapeKey: true,
 			allowEnterKey: true,
+			allowOutsideClick: true,
 			preConfirm: () => {
 				if (!reminderInfoRef.current.title || !reminderInfoRef.current.dueDate) {
-					MySwal.showValidationMessage('Please enter both text and date');
+					MySwal.showValidationMessage('Please add a Title and a due date. ');
 				}
 			}
 		}).then(result => {
 			if (result.isConfirmed) {
 				createReminder(reminderInfoRef.current)
+				setReminderInfo({})
 			}
 		})
 	}

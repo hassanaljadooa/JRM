@@ -1,11 +1,13 @@
 import './index.css'
 import { useEffect, useState } from "react";
-import { NavBar } from "./Components/NavBar.jsx";
+import { NavBar } from "./Components/Elements/NavBar.jsx";
 import { ReminderList } from "./Components/Core/ReminderList.jsx";
 import { Toolbar } from "./Components/Core/Toolbar.jsx";
 
 export default function App() {
-    const currentDate = new Date()
+    // current date/time in POSIX/Epoch
+    const currentEpoch = Date.now()
+
     // display mode to show completed or/ incomplete reminders based on the value in the state
     let [displayMode, setDisplayMode] = useState('incomplete')
 
@@ -13,6 +15,8 @@ export default function App() {
         return localStorage.getItem('reminders') !== null ? JSON.parse(localStorage.getItem('reminders')) : []
     })
 
+    // This represents that data being displayed to the user
+    // a subset of the complete list of reminders based on completion status.
     const [currentData, setCurrentData] = useState([])
 
     // moniters changes to the todos data and display mode and reacts accordingly
@@ -38,9 +42,18 @@ export default function App() {
      * TODO: This should refactored into class based data model
      * */
     function createReminder(reminderInfo) {
+        let reminder = {
+            id: crypto.randomUUID(),
+            title: reminderInfo.title,
+            summary: reminderInfo.summary,
+            completed: false,
+            dueDate: reminderInfo.dueDate,
+            createdOn: currentEpoch
+        }
+
         setTodos(currentTodos => {
             // creates a new copy of the current todo state, then adds a new todo object which is then repopulated into the state.
-            return [...currentTodos, reminderInfo]
+            return [...currentTodos, reminder]
         })
     }
 
@@ -66,10 +79,10 @@ export default function App() {
     }
 
     // edits the title of the todo object
-    function editReminder(todoID, title, dueDate) {
+    function editReminder(todoID, title, dueDate, summary) {
         setTodos(currentTodos => {
             return currentTodos.map(todo => {
-                return todo.id === todoID ? { ...todo, title, dueDate } : todo
+                return todo.id === todoID ? { ...todo, title, dueDate, summary } : todo
             })
         })
     }
@@ -94,6 +107,27 @@ export default function App() {
                         editReminder={editReminder}
                         toggleReminder={toggleReminder}
                         createReminder={createReminder}
+                        deleteReminder={deleteReminder}
+                    />
+                    <ReminderList
+                        todos={currentData}
+                        displayMode={displayMode}
+                        editReminder={editReminder}
+                        toggleReminder={toggleReminder}
+                        deleteReminder={deleteReminder}
+                    />
+                    <ReminderList
+                        todos={currentData}
+                        displayMode={displayMode}
+                        editReminder={editReminder}
+                        toggleReminder={toggleReminder}
+                        deleteReminder={deleteReminder}
+                    />
+                    <ReminderList
+                        todos={currentData}
+                        displayMode={displayMode}
+                        editReminder={editReminder}
+                        toggleReminder={toggleReminder}
                         deleteReminder={deleteReminder}
                     />
                 </div>
